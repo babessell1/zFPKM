@@ -175,9 +175,10 @@ zFPKMCalc <- function(fpkm) {
   
   # calculate rolling average
   print(class(d[["y"]]))
+  print(d[["y"][1:20]])
   roll_avg <- function(a, n=50) {filter(n, rep(1/n, n), sides=2)}
-  d[["roll_y"]] <- roll_avg(as.character(d[["y"]]))
-  
+  d[["roll_y"]] <- roll_avg(d[["y"]])
+  print("rolled")
   # find all local maxima of rolling average
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
   find_maxima <- function (x, m = 5){
