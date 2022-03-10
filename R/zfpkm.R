@@ -201,6 +201,7 @@ zFPKMCalc <- function(fpkm) {
   #mu <- d[["x"]][which.max(d[["y"]])]
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
   max_y <- d[["y"]][fit_max]
+  print(max_y)
   
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
@@ -238,6 +239,7 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   megaDF <- data.frame()
 
   for (name in names(results)) {
+    print(name)
     result <- results[[name]]
     d <- result[["d"]]
     mu <- result[["m"]]
@@ -258,7 +260,6 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
     df <- data.frame(sample_name=name, log2fpkm=d[["x"]], fpkm_density=d[["y"]],
                      fitted_density_scaled=scaleFitted)
     
-    print(df$sample_name)
 
     megaDF <- megaDF %>% dplyr::bind_rows(df)
   }
