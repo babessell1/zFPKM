@@ -283,13 +283,13 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   }
 
   megaDFG <- megaDF %>% tidyr::gather(source, density, -c(log2fpkm, sample_name))
-  print(megaDFG$sample_name)
+  print(unique(megaDFG$sample_name))
 
   maxX = max(megaDFG[["log2fpkm"]])
   maxY = max(d[["y"]])
 
   p <- ggplot2::ggplot(megaDFG, ggplot2::aes(x=log2fpkm, y=density, color=source)) +
-    ggplot2::facet_wrap(~ sample_name, labeller=as_labeller(megaDFG$sample_name)) +
+    ggplot2::facet_wrap(~ sample_name, labeller=as_labeller(unique(megaDFG$sample_name))) +
     ggplot2::geom_line(alpha=0.7) +
     ggplot2::theme_bw() +
     ggplot2::labs(x="log2(FPKM)", y="[scaled] density")  +
