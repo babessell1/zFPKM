@@ -174,9 +174,9 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
-  perc2 <- as.integer(0.02*length(d[["y"]]) + 1)
-  print(perc2)
-  f_2perc <- rep(1/perc2, perc2)
+  perc <- as.integer(10*length(d[["y"]]) + 1)
+  print(perc)
+  f_perc <- rep(1/perc2, perc2)
   
   #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc2)
@@ -230,7 +230,7 @@ ZFPKMResult <- function(zfpkmVector, density, mu, stdev) {
 }
 
 
-PlotGaussianFitDF <- function(results, FacetTitles=FALSE, PlotXfloor) {
+PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   # Plot a grid of the log_2(FPKM) density and the fitted Gaussian (scale both
   # to the same density scale so that the curves overlap).
 
@@ -254,6 +254,8 @@ PlotGaussianFitDF <- function(results, FacetTitles=FALSE, PlotXfloor) {
 
     df <- data.frame(sample_name=name, log2fpkm=d[["x"]], fpkm_density=d[["y"]],
                      fitted_density_scaled=scaleFitted)
+    
+    print(df$sample_name)
 
     megaDF <- megaDF %>% dplyr::bind_rows(df)
   }
@@ -261,6 +263,7 @@ PlotGaussianFitDF <- function(results, FacetTitles=FALSE, PlotXfloor) {
   megaDFG <- megaDF %>% tidyr::gather(source, density, -c(log2fpkm, sample_name))
 
   maxX = max(megaDFG[["log2fpkm"]])
+  maxY = max(d[["y"]])
 
   p <- ggplot2::ggplot(megaDFG, ggplot2::aes(x=log2fpkm, y=density, color=source)) +
     ggplot2::facet_wrap(~ sample_name) +
@@ -268,7 +271,8 @@ PlotGaussianFitDF <- function(results, FacetTitles=FALSE, PlotXfloor) {
     ggplot2::theme_bw() +
     ggplot2::labs(x="log2(FPKM)", y="[scaled] density")  +
     ggplot2::theme(legend.position="top") +
-    ggplot2::xlim(PlotXfloor, maxX)
+    ggplot2::xlim(PlotXfloor, maxX) +
+    ggplot2::ylim(maxY)
 
   if (!FacetTitles) {  #remove the title on each facet
     p = p  + ggplot2::theme(strip.background = ggplot2::element_blank(),
