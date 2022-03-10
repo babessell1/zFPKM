@@ -174,7 +174,7 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
-  roll_avg <- function(a, n=50) {filter(n, rep(1/n, n), sides=2)}
+  roll_avg <- function(a, n=50) {filter(a, rep(1/n, n), sides=2)}
   d[["roll_y"]] <- roll_avg(d[["y"]])
   print("rolled")
   # find all local maxima of rolling average
