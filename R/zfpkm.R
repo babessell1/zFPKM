@@ -284,6 +284,8 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
 
   megaDFG <- megaDF %>% tidyr::gather(source, density, -c(log2fpkm, sample_name))
   print(unique(megaDFG$sample_name))
+  labels <- unique(megaDFG$sample_name
+  print(head(megaDFG))
 
   maxX = max(megaDFG[["log2fpkm"]])
   maxY = max(d[["y"]])
