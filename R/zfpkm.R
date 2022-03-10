@@ -174,7 +174,7 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
-  perc2 <- as.integer(.02*length(d[["y"]]) + 1)
+  perc2 <- as.integer(0.02*length(d[["y"]]) + 1)
   print(perc2)
   f_2perc <- rep(1/perc2, perc2)
   
