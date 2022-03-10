@@ -199,7 +199,7 @@ zFPKMCalc <- function(fpkm) {
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
   max_y <- d[["y"]][fit_max]
   cnt <- 0
-  while  ( (max_y < 0.5*max(d[["y"]]) && (cnt < 5) ) { # while selected local max y is less than 50% of actual maximum
+  while  ( (max_y < 0.5*max(d[["y"]])) && (cnt < 5) ) { # while selected local max y is less than 50% of actual maximum
     cnt <- cnt + 0.01
     perc <- as.integer((0.05-cnt)*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
     
