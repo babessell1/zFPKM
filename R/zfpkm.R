@@ -174,11 +174,29 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
-  print(d[["y"]])
-
+  roll_avg <- function(a, n=50) {filter(n, rep(1/n, n), sides=2)}
+  d[["roll_y"]] <- roll_avg(d[["y"]])
+  
+  # find all local maxima of rolling average
+  # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
+  find_maxima <- function (x, m = 5){
+    shape <- diff(sign(diff(x, na.pad = FALSE)))
+    pks <- sapply(which(shape < 0), FUN = function(i){
+      z <- i - m + 1
+      z <- ifelse(z > 0, z, 1)
+      w <- i + m + 1
+      w <- ifelse(w < length(x), w, length(x))
+      if(all(x[c(z : i, (i + 2) : w)] <= x[i + 1])) return(i + 1) else return(numeric(0))
+    })
+    pks <- unlist(pks)
+    pks
+  }
+  local_maxes <- find_maxima(d[["roll_y"]])
+  
   # Set the maximum point in the density as the mean for the fitted Gaussian
-  mu <- d[["x"]][which.max(d[["y"]])]
-
+  #mu <- d[["x"]][which.max(d[["y"]])]
+  mu <- d[["x"]][max(local_maxes)] # get max with respect to x) local maxima of rolling average
+  
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
   stdev <- (U - mu) * sqrt(pi / 2)
