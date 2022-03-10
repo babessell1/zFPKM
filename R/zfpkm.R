@@ -21,6 +21,9 @@
 #   Separating zFPKM calc and plotting as per Bioconductor review suggestion.
 # RA 10Jul2017:
 #   Style changes for Bioconductor submission.
+# BAB 10Mar2022:
+#   Rolling average to filter insignificant local maxima and implementation of fitting
+#   Gaussian to highest local maxima (with respect to X) rather than global maxima
 
 
 #' zFPKM Transformation
@@ -169,6 +172,9 @@ zFPKMCalc <- function(fpkm) {
 
   # Compute kernel density estimate
   d <- density(fpkmLog2)
+  
+  # calculate rolling average
+  print(d)
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
   mu <- d[["x"]][which.max(d[["y"]])]
