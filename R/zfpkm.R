@@ -174,7 +174,7 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
-  print(d)
+  print(d[["y"]])
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
   mu <- d[["x"]][which.max(d[["y"]])]
