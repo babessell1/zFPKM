@@ -273,8 +273,7 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
     ggplot2::theme_bw() +
     ggplot2::labs(x="log2(FPKM)", y="[scaled] density")  +
     ggplot2::theme(legend.position="top") +
-    ggplot2::xlim(PlotXfloor, maxX) +
-    ggplot2::ylim(maxY)
+    ggplot2::xlim(PlotXfloor, maxX)
 
   if (!FacetTitles) {  #remove the title on each facet
     p = p  + ggplot2::theme(strip.background = ggplot2::element_blank(),
