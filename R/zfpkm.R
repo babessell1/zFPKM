@@ -214,7 +214,7 @@ zFPKMCalc <- function(fpkm) {
   }
   print(max_y)
   
-  if ( (max_y < 0.5*max(d[["y"]]) ) {
+  if ( (max_y < 0.5*max(d[["y"]])) ) {
     mu <- d[["x"]][which.max(d[["y"]])]
     max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
     print("ROLLING AVERAGE ADJUSTMENT FAILED")
