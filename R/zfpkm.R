@@ -174,8 +174,9 @@ zFPKMCalc <- function(fpkm) {
   d <- density(fpkmLog2)
   
   # calculate rolling average
+  print(class(d[["y"]]))
   roll_avg <- function(a, n=50) {filter(n, rep(1/n, n), sides=2)}
-  d[["roll_y"]] <- roll_avg(as.numeric(d[["y"]]))
+  d[["roll_y"]] <- roll_avg(as.character(d[["y"]]))
   
   # find all local maxima of rolling average
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
