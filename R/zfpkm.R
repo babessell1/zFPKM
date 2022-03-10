@@ -179,7 +179,7 @@ zFPKMCalc <- function(fpkm) {
   f_2perc <- rep(1/perc2, perc2)
   
   #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
-  d[["roll_y"]] <- rollmean(d[["y"]], perc2)
+  d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc2)
   print("rolled")
   # find all local maxima of rolling average
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
