@@ -200,7 +200,8 @@ zFPKMCalc <- function(fpkm) {
   
   # Set the maximum point in the density as the mean for the fitted Gaussian
   #mu <- d[["x"]][which.max(d[["y"]])]
-  mu <- d[["x"]][max(local_maxes)] # get max with respect to x) local maxima of rolling average
+  mu <- d[["x"]][max(local_maxes)] # get max with respect to x) local maxima of rolling 
+  max_y <- d[["y"]][max(local_maxes)]
   
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
@@ -209,13 +210,13 @@ zFPKMCalc <- function(fpkm) {
   # Compute zFPKM transform
   zFPKM <- (fpkmLog2 - mu) / stdev
 
-  result <- ZFPKMResult(zFPKM, d, mu, stdev)
+  result <- ZFPKMResult(zFPKM, d, mu, stdev, max_y)
 
   return(result)
 }
 
 
-ZFPKMResult <- function(zfpkmVector, density, mu, stdev) {
+ZFPKMResult <- function(zfpkmVector, density, mu, stdev, max_y) {
   # S3 class to store zFPKM vector and related metrics to be used in plotting
 
   zfpkmRes <- list(
@@ -223,6 +224,7 @@ ZFPKMResult <- function(zfpkmVector, density, mu, stdev) {
     d = density,
     m = mu,
     s = stdev
+    max_y = max_y
   )
 
   class(zfpkmRes) <- append(class(zfpkmRes), "zFPKM")
@@ -241,13 +243,15 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
     d <- result[["d"]]
     mu <- result[["m"]]
     stdev <- result[["s"]]
+    max_y <- result[["max_y"]]
 
     # Get max of each density and then compute the factor to multiply the
     # fitted Gaussian. NOTE: This is for plotting purposes only, not for zFPKM
     # transform.
     fitted <- dnorm(d[["x"]], mean=mu, sd=stdev)
 
-    maxFPKM <- max(d[["y"]])
+    #maxFPKM <- max(d[["y"]])
+    maxFPKM <- max_y
     maxFitted <- max(fitted)
 
     scaleFitted <- fitted * (maxFPKM / maxFitted)
