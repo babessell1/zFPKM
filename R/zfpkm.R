@@ -199,7 +199,7 @@ zFPKMCalc <- function(fpkm) {
   
   # Set the maximum point in the density as the mean for the fitted Gaussian
   #mu <- d[["x"]][which.max(d[["y"]])]
-  mu <- d[["x"]][[fit_max] # get max with respect to x) local maxima of rolling 
+  mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
   max_y <- d[["y"]][fit_max]
   
   # Determine the standard deviation
