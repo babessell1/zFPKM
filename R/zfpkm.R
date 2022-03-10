@@ -175,13 +175,10 @@ zFPKMCalc <- function(fpkm) {
   
   # calculate rolling average
   perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
-  f_perc <- rep(1/perc, perc)
   
-  #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
-  # find all local maxima of rolling average
-  # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
   
+  # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
   find_maxima <- function (x, m = 1){
     shape <- diff(sign(diff(x, na.pad = FALSE)))
     pks <- sapply(which(shape < 0), FUN = function(i){
@@ -194,14 +191,36 @@ zFPKMCalc <- function(fpkm) {
     pks <- unlist(pks)
     pks
   }
+  
   local_maxes <- find_maxima(d[["roll_y"]])
-  fit_max <-max(local_maxes) + as.integer(perc/2)
+  fit_max <- max(local_maxes) + as.integer(perc/2)
   
   # Set the maximum point in the density as the mean for the fitted Gaussian
-  #mu <- d[["x"]][which.max(d[["y"]])]
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
   max_y <- d[["y"]][fit_max]
+  cnt <- 0
+  while  ( (max_y < 0.5*max(d[["y"]]) && (cnt < 5) ) { # while selected local max y is less than 50% of actual maximum
+    cnt <- cnt + 0.01
+    perc <- as.integer((0.05-cnt)*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
+    
+    #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
+    d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
+    local_maxes[local_maxes < max(local_maxes)]
+    fit_max <- max(local_maxes) + as.integer(perc/2)
+    # Set the maximum point in the density as the mean for the fitted Gaussian
+    #mu <- d[["x"]][which.max(d[["y"]])]
+    mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
+    max_y <- d[["y"]][fit_max]
+  }
   print(max_y)
+  
+  if ( (max_y < 0.5*max(d[["y"]]) ) {
+    mu <- d[["x"]][which.max(d[["y"]])]
+    max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
+    print("ROLLING AVERAGE ADJUSTMENT FAILED")
+  }
+       
+       
   
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
@@ -239,7 +258,6 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   megaDF <- data.frame()
 
   for (name in names(results)) {
-    print(name)
     result <- results[[name]]
     d <- result[["d"]]
     mu <- result[["m"]]
@@ -265,12 +283,13 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   }
 
   megaDFG <- megaDF %>% tidyr::gather(source, density, -c(log2fpkm, sample_name))
+  print(megaDFG$sample_name)
 
   maxX = max(megaDFG[["log2fpkm"]])
   maxY = max(d[["y"]])
 
   p <- ggplot2::ggplot(megaDFG, ggplot2::aes(x=log2fpkm, y=density, color=source)) +
-    ggplot2::facet_wrap(~ sample_name) +
+    ggplot2::facet_wrap(~ sample_name, labeller=as_labeller(megaDFG$sample_name)) +
     ggplot2::geom_line(alpha=0.7) +
     ggplot2::theme_bw() +
     ggplot2::labs(x="log2(FPKM)", y="[scaled] density")  +
