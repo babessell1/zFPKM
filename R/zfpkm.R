@@ -299,10 +299,6 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
     ggplot2::theme(legend.position="top") +
     ggplot2::xlim(PlotXfloor, maxX)
 
-  if (!FacetTitles) {  #remove the title on each facet
-    p = p  + ggplot2::theme(strip.background = ggplot2::element_blank(),
-                            strip.text = ggplot2::element_blank())
-  }
 
   print(p)
 }
