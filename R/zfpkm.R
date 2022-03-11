@@ -291,7 +291,8 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   maxY = max(d[["y"]])
 
   p <- ggplot2::ggplot(megaDFG, ggplot2::aes(x=log2fpkm, y=density, color=source)) +
-    ggplot2::facet_wrap(~ sample_name, labeller=as_labeller(unique(megaDFG$sample_name))) +
+    #ggplot2::facet_wrap(~ sample_name) +
+    ggplot2::facet_wrap(vars(sample_name)) +
     ggplot2::geom_line(alpha=0.7) +
     ggplot2::theme_bw() +
     ggplot2::labs(x="log2(FPKM)", y="[scaled] density")  +
