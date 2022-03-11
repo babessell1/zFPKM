@@ -212,12 +212,10 @@ zFPKMCalc <- function(fpkm) {
     mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
     max_y <- d[["y"]][fit_max]
   }
-  print(max_y)
   
   if ( (max_y < 0.5*max(d[["y"]])) ) {
     mu <- d[["x"]][which.max(d[["y"]])]
     max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
-    print("ROLLING AVERAGE ADJUSTMENT FAILED")
   }
        
        
@@ -283,9 +281,7 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   }
 
   megaDFG <- megaDF %>% tidyr::gather(source, density, -c(log2fpkm, sample_name))
-  print(unique(megaDFG$sample_name))
   labels <- unique(megaDFG$sample_name)
-  print(head(megaDFG))
 
   maxX = max(megaDFG[["log2fpkm"]])
   maxY = max(d[["y"]])
