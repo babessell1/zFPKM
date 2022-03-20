@@ -169,15 +169,16 @@ zFPKMCalc <- function(fpkm) {
 
   # log_2 transform the FPKM values
   fpkmLog2 <- log(fpkm, base=2)
+  print(fpkmLog2)
 
   # Compute kernel density estimate
   d <- density(fpkmLog2)
-  
+
   # calculate rolling average
   perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
-  
+
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
-  
+
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
   find_maxima <- function (x, m = 1){
     shape <- diff(sign(diff(x, na.pad = FALSE)))
@@ -191,35 +192,35 @@ zFPKMCalc <- function(fpkm) {
     pks <- unlist(pks)
     pks
   }
-  
+
   local_maxes <- find_maxima(d[["roll_y"]])
   fit_max <- max(local_maxes) + as.integer(perc/2)
-  
+
   # Set the maximum point in the density as the mean for the fitted Gaussian
-  mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
+  mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
   max_y <- d[["y"]][fit_max]
   cnt <- 0
   while  ( (max_y < 0.5*max(d[["y"]])) && (cnt < 5) ) { # while selected local max y is less than 50% of actual maximum
     cnt <- cnt + 1
     perc <- as.integer((0.05-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
-    
+
     #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
     d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
     local_maxes[local_maxes < max(local_maxes)]
     fit_max <- max(local_maxes) + as.integer(perc/2)
     # Set the maximum point in the density as the mean for the fitted Gaussian
     #mu <- d[["x"]][which.max(d[["y"]])]
-    mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling 
+    mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
     max_y <- d[["y"]][fit_max]
   }
-  
+
   if ( (max_y < 0.5*max(d[["y"]])) ) {
     mu <- d[["x"]][which.max(d[["y"]])]
     max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
   }
-       
-       
-  
+
+
+
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
   stdev <- (U - mu) * sqrt(pi / 2)
@@ -275,7 +276,7 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
 
     df <- data.frame(sample_name=name, log2fpkm=d[["x"]], fpkm_density=d[["y"]],
                      fitted_density_scaled=scaleFitted)
-    
+
 
     megaDF <- megaDF %>% dplyr::bind_rows(df)
   }
