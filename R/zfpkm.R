@@ -169,7 +169,7 @@ zFPKMCalc <- function(fpkm) {
 
   # log_2 transform the FPKM values
   fpkmLog2 <- log(fpkm, base=2)
-  print(head(fpkmLog2))
+  print(fpkmLog2[1:100])
 
   # Compute kernel density estimate
   d <- density(fpkmLog2)
