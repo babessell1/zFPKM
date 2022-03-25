@@ -172,13 +172,15 @@ zFPKMCalc <- function(fpkm) {
   #print(fpkmLog2[1:100])
 
   # Compute kernel density estimate
-  thresh <- sort(unique(fpkm), decreasing=FALSE)[2]
-  d <- density(fpkmLog2[fpkmLog2>thresh])
+  d <- density(fpkmLog2)
+  thresh <- sort(unique(fpkm), decreasing=FALSE)[3]
+  d_thresh <- density(fpkmLog2[fpkmLog2>thresh])
 
   # calculate rolling average
   perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
 
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
+  d_thresh[["roll_y"]] <- zoo::rollmean(d_thresh[["y"]], perc)
 
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
   find_maxima <- function (x, m = 1){
@@ -194,7 +196,7 @@ zFPKMCalc <- function(fpkm) {
     pks
   }
 
-  local_maxes <- find_maxima(d[["roll_y"]])
+  local_maxes <- find_maxima(d_thresh[["roll_y"]])
   fit_max <- max(local_maxes) + as.integer(perc/2)
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
