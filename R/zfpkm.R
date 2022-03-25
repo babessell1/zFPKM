@@ -168,11 +168,13 @@ zFPKMCalc <- function(fpkm) {
   }
 
   # log_2 transform the FPKM values
-  fpkmLog2 <- log(fpkm[fpkm>1e-9], base=2)
+  fpkmLog2_filt <- log(fpkm[fpkm>1e-9], base=2)
+  fpkmLog2 <- log(fpkm, base=2)
   #print(fpkmLog2[1:100])
 
   # Compute kernel density estimate
-  d <- density(fpkmLog2)
+  d <- density(fpkmLog2_filt)
+
 
   # calculate rolling average
   perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
