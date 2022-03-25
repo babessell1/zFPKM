@@ -172,7 +172,7 @@ zFPKMCalc <- function(fpkm) {
   #print(fpkmLog2[1:100])
 
   # Compute kernel density estimate
-  small_2 <- min( fpkmLog2[fpkmLog2!=min(fpkmLog2)] )
+  thresh <- sort(unique(fpkm), decreasing=FALSE)[3]
   d <- density(fpkmLog2[fpkmLog2>small_2])
 
   # calculate rolling average
