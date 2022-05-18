@@ -61,7 +61,7 @@
 #' @import checkmate dplyr ggplot2 tidyr SummarizedExperiment
 #'
 #' @export
-zFPKM<- function(fpkmDF, min_thresh assayName="fpkm") {
+zFPKM<- function(fpkmDF, min_thresh, assayName="fpkm") {
 
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
