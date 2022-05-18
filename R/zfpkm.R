@@ -168,7 +168,7 @@ zFPKMCalc <- function(fpkm) {
   }
 
   # log_2 transform the FPKM values
-  fpkmLog2_filt <- log(fpkm[fpkm>0.01], base=2)
+  fpkmLog2_filt <- log(fpkm[fpkm>0.001], base=2)
   fpkmLog2 <- log(fpkm, base=2)
   #print(fpkmLog2[1:100])
 
