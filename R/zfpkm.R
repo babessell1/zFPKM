@@ -168,7 +168,7 @@ zFPKMCalc <- function(fpkm) {
   }
 
   # log_2 transform the FPKM values
-  fpkmLog2_filt <- log(fpkm[fpkm>1e-9], base=2)
+  fpkmLog2_filt <- log(fpkm[fpkm>0.01], base=2)
   fpkmLog2 <- log(fpkm, base=2)
   #print(fpkmLog2[1:100])
 
@@ -177,7 +177,7 @@ zFPKMCalc <- function(fpkm) {
 
 
   # calculate rolling average
-  perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
+  perc <- as.integer(0.01*length(d[["y"]]) + 1) # 10% roll avg interval
 
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
 
