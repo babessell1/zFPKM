@@ -66,7 +66,7 @@ zFPKM<- function(fpkmDF, min_thresh assayName="fpkm") {
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
 
-  return(zFPKMTransform(fpkmDF, assayName, min_thresh)[[2]])
+  return(zFPKMTransform(fpkmDF, min_thresh, assayName)[[2]])
 }
 
 
