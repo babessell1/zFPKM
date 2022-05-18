@@ -61,12 +61,12 @@
 #' @import checkmate dplyr ggplot2 tidyr SummarizedExperiment
 #'
 #' @export
-zFPKM<- function(fpkmDF, assayName="fpkm") {
+zFPKM<- function(fpkmDF, min_thresh assayName="fpkm") {
 
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
 
-  return(zFPKMTransform(fpkmDF, assayName)[[2]])
+  return(zFPKMTransform(fpkmDF, assayName, min_thresh)[[2]])
 }
 
 
@@ -114,16 +114,16 @@ removeNanInfRows <- function(fpkm) {
 #' @import checkmate dplyr ggplot2 tidyr SummarizedExperiment zoo
 #'
 #' @export
-zFPKMPlot <- function(fpkmDF, assayName="fpkm", FacetTitles=FALSE, PlotXfloor=-20) {
+zFPKMPlot <- function(fpkmDF, min_thresh, assayName="fpkm", FacetTitles=FALSE, PlotXfloor=-20) {
 
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
 
-  PlotGaussianFitDF(zFPKMTransform(fpkmDF, assayName)[[1]], FacetTitles, PlotXfloor)
+  PlotGaussianFitDF(zFPKMTransform(fpkmDF, min_thresh, assayName)[[1]], FacetTitles, PlotXfloor)
 }
 
 
-zFPKMTransform <- function(fpkmDF, assayName) {
+zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
   # Helper function for zFPKM output and plotting. Do not call directly.
   #
   # Args:
@@ -141,7 +141,7 @@ zFPKMTransform <- function(fpkmDF, assayName) {
   zFPKMDF <- data.frame(row.names=row.names(fpkmDF))
   outputs <- list()
   for (c in colnames(fpkmDF)) {
-    output <- zFPKMCalc(fpkmDF[, c])
+    output <- zFPKMCalc(fpkmDF[, c], min_thresh)
     zFPKMDF[, c] <- output[["z"]]
     outputs[[c]] <- output
   }
@@ -150,7 +150,7 @@ zFPKMTransform <- function(fpkmDF, assayName) {
 }
 
 
-zFPKMCalc <- function(fpkm) {
+zFPKMCalc <- function(fpkm, min_thresh) {
   # Performs the zFPKM transform on RNA-seq FPKM data. This involves fitting a
   # Gaussian distribution based on the right side of the FPKM distribution, as
   # described by Hart et al., 2013 (Pubmed ID 24215113). The zFPKM transformed
@@ -168,7 +168,7 @@ zFPKMCalc <- function(fpkm) {
   }
 
   # log_2 transform the FPKM values
-  fpkmLog2_filt <- log(fpkm[fpkm>0.001], base=2)
+  fpkmLog2_filt <- log(fpkm[fpkm>min_thresh], base=2)
   fpkmLog2 <- log(fpkm, base=2)
   #print(fpkmLog2[1:100])
 
