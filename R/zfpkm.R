@@ -202,7 +202,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
   max_y <- d[["y"]][fit_max]
   cnt <- 0
-  
+  print("while1")
   while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) ) { # while selected local max y is less than 20% of actual maximum 
 	cnt <- cnt + 1
     perc <- as.integer((0.2-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
@@ -220,6 +220,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 	#if ( which.max(local_maxes) < which(local_maxes == max_y)
 	
   }
+  print("while2")
 
   if ( (max_y < 0.1*max(d[["y"]])) ) {
     mu <- d[["x"]][which.max(d[["y"]])]
