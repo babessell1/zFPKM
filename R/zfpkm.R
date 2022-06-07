@@ -132,7 +132,7 @@ zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
   # Returns:
   #   Internal objects used for zFPKM calculations and plotting.
 
-  if (is(fpkmDF, "SummarizedExperiment")) {
+  if (is(fpkmDF, "SummarizedExperiment"))  {
     fpkmDF <- assay(fpkmDF, assayName)
   }
   print("rm")
