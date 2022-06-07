@@ -202,18 +202,23 @@ zFPKMCalc <- function(fpkm, min_thresh) {
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
   max_y <- d[["y"]][fit_max]
   cnt <- 0
-  while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) ) { # while selected local max y is less than 20% of actual maximum
-    cnt <- cnt + 1
+  
+  while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) ) { # while selected local max y is less than 20% of actual maximum 
+	cnt <- cnt + 1
     perc <- as.integer((0.2-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
 
     #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
     d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
-    local_maxes[local_maxes < max(local_maxes)]
+
+	local_maxes <- local_maxes[floor(0.3*length(local_maxes)):length(local_maxes)]
     fit_max <- max(local_maxes) + as.integer(perc/2)
     # Set the maximum point in the density as the mean for the fitted Gaussian
     #mu <- d[["x"]][which.max(d[["y"]])]
     mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
     max_y <- d[["y"]][fit_max]
+	
+	#if ( which.max(local_maxes) < which(local_maxes == max_y)
+	
   }
 
   if ( (max_y < 0.1*max(d[["y"]])) ) {
