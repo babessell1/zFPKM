@@ -177,7 +177,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 
 
   # calculate rolling average
-  perc <- as.integer(0.001*length(d[["y"]]) + 1) # 10% roll avg interval
+  perc <- as.integer(0.1*length(d[["y"]]) + 1) # 10% roll avg interval
 
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
 
