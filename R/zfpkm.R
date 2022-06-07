@@ -118,7 +118,6 @@ zFPKMPlot <- function(fpkmDF, min_thresh, assayName="fpkm", FacetTitles=FALSE, P
 
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
-  print("trans")
   PlotGaussianFitDF(zFPKMTransform(fpkmDF, min_thresh, assayName)[[1]], FacetTitles, PlotXfloor)
 }
 
@@ -135,9 +134,7 @@ zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
   if (is(fpkmDF, "SummarizedExperiment"))  {
     fpkmDF <- assay(fpkmDF, assayName)
   }
-  print("rm")
   fpkmDF <- removeNanInfRows(fpkmDF)
-  print("as df")
   zFPKMDF <- data.frame(row.names=row.names(fpkmDF))
   outputs <- list()
   for (c in colnames(fpkmDF)) {
@@ -145,7 +142,6 @@ zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
     zFPKMDF[, c] <- output[["z"]]
     outputs[[c]] <- output
   }
-  print("return")
 
   return(list(outputs, zFPKMDF))
 }
@@ -283,9 +279,6 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
 
     scaleFitted <- fitted * (maxFPKM / maxFitted)
 
-	print("df")
-	print(d[["x"]][1:10])
-	print(d[["y"]][1:10])
     df <- data.frame(sample_name=name, log2fpkm=d[["x"]], fpkm_density=d[["y"]],
                      fitted_density_scaled=scaleFitted)
 
@@ -299,7 +292,6 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
   maxX = max(megaDFG[["log2fpkm"]])
   maxY = max(d[["y"]])
 
-  print("preplot")
   p <- ggplot2::ggplot(megaDFG, ggplot2::aes(x=log2fpkm, y=density, color=source)) +
     #ggplot2::facet_wrap(~ sample_name) +
     ggplot2::facet_wrap(vars(sample_name)) +
@@ -311,5 +303,4 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
 
 
   print(p)
-  print("postplot")
 }
