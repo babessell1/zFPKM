@@ -283,8 +283,8 @@ PlotGaussianFitDF <- function(results, FacetTitles=TRUE, PlotXfloor) {
     scaleFitted <- fitted * (maxFPKM / maxFitted)
 
 	print("df")
-	print(d[["x"]][1:10]
-	print(d[["y"]][1:10]
+	print(d[["x"]][1:10])
+	print(d[["y"]][1:10])
     df <- data.frame(sample_name=name, log2fpkm=d[["x"]], fpkm_density=d[["y"]],
                      fitted_density_scaled=scaleFitted)
 
