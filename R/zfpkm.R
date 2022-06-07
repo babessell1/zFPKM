@@ -118,7 +118,7 @@ zFPKMPlot <- function(fpkmDF, min_thresh, assayName="fpkm", FacetTitles=FALSE, P
 
   assert(checkDataFrame(fpkmDF), checkClass(fpkmDF, "SummarizedExperiment"),
          combine="or")
-
+  print("trans")
   PlotGaussianFitDF(zFPKMTransform(fpkmDF, min_thresh, assayName)[[1]], FacetTitles, PlotXfloor)
 }
 
@@ -135,9 +135,9 @@ zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
   if (is(fpkmDF, "SummarizedExperiment")) {
     fpkmDF <- assay(fpkmDF, assayName)
   }
-
+  print("rm")
   fpkmDF <- removeNanInfRows(fpkmDF)
-
+  print("as df")
   zFPKMDF <- data.frame(row.names=row.names(fpkmDF))
   outputs <- list()
   for (c in colnames(fpkmDF)) {
@@ -145,6 +145,7 @@ zFPKMTransform <- function(fpkmDF, min_thresh, assayName) {
     zFPKMDF[, c] <- output[["z"]]
     outputs[[c]] <- output
   }
+  print("return")
 
   return(list(outputs, zFPKMDF))
 }
