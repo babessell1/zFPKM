@@ -174,8 +174,8 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 
 
   # calculate rolling average
-  perc <- as.integer(0.2*length(d[["y"]]) + 1) # 10% roll avg interval
-
+  perc <- as.integer(0.01*length(d[["y"]]) + 1) # 10% roll avg interval
+	
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
 
   # from https://stats.stackexchange.com/questions/22974/how-to-find-local-peaks-valleys-in-a-series-of-data
@@ -200,9 +200,9 @@ zFPKMCalc <- function(fpkm, min_thresh) {
   max_y <- d[["y"]][fit_max]
   cnt <- 0
   
-  while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) ) { # while selected local max y is less than 20% of actual maximum 
+  while  ( (max_y < 0.5*max(d[["y"]])) && (cnt < 5) ) { # while selected local max y is less than 20% of actual maximum 
 	cnt <- cnt + 1
-    perc <- as.integer((0.2-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
+    perc <- as.integer((0.5-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
 
     #d[["roll_y"]] <- filter(data.frame(d[["y"]]), f_2perc, sides=2)
     d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
