@@ -223,7 +223,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
     mu <- d[["x"]][which.max(d[["y"]])]
     max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
 	# TODO: FAILURE MESSAGE AND OUTPUT TO LIST?
-  #}
+  }
 
   if ( TRUE ) {
 	#local_maxes <- local_maxes[floor(0.3*length(local_maxes)):length(local_maxes)]
@@ -231,7 +231,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 	while ( length(local_maxes) > 1 && d[["x"]][local_maxes[2]] > d[["x"]][local_maxes[1]] ) {	
 		local_maxes <- local_maxes[-1]
 	fit_max <- local_maxes[1]
-
+  }
 
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
