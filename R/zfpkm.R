@@ -230,6 +230,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 	local_maxes <- sort(local_maxes, decreasing=TRUE)
 	while ( length(local_maxes) > 1 && d[["x"]][local_maxes[2]] > d[["x"]][local_maxes[1]] ) {	
 		local_maxes <- local_maxes[-1]
+	}
 	fit_max <- local_maxes[1]
   }
 
