@@ -229,7 +229,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
   while ( length(local_maxes) > 1 && d[["x"]][local_maxes[2]] > d[["x"]][local_maxes[1]] && d[["y"]][local_maxes[2]] > 0.2*max(d[["y"]]) ) {
 		local_maxes <- local_maxes[-1]
   }
-  fit_max <- local_maxes[1] + as.integer(2*perc)
+  fit_max <- local_maxes[1] + as.integer(perc/2)
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
   max_y <- d[["y"]][fit_max]
 
