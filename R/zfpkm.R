@@ -238,6 +238,8 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 	mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
 	max_y <- d[["y"]][fit_max]
   }
+  print(mu)
+  print(max_y)
 
   # Determine the standard deviation
   U <- mean(fpkmLog2[fpkmLog2 > mu])
