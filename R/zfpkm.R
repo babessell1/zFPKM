@@ -193,6 +193,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
   }
 
   local_maxes <- find_maxima(d[["roll_y"]])
+  print(local_maxes)
   fit_max <- max(local_maxes) + as.integer(perc/2)
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
