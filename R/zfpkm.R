@@ -174,7 +174,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 
 
   # calculate rolling average
-  perc <- as.integer(0.05*length(d[["y"]]) + 1) # 10% roll avg interval
+  perc <- as.integer(0.01*length(d[["y"]]) + 1) # 10% roll avg interval
 
   d[["roll_y"]] <- zoo::rollmean(d[["y"]], perc)
 
@@ -194,7 +194,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 
   local_maxes <- find_maxima(d[["roll_y"]])
   local_maxes <- find_maxima(d[["roll_y"]][floor(0.01*length(d[["roll_y"]])):ceiling(0.9*length(d[["roll_y"]]))])
-  print(local_maxes)
+  #print(local_maxes)
   fit_max <- max(local_maxes) + as.integer(perc/2)
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
