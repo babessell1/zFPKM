@@ -192,7 +192,7 @@ zFPKMCalc <- function(fpkm, min_thresh) {
     pks
   }
 
-  local_maxes <- find_maxima(d[["roll_y"]][floor(0.3*length(d[["roll_y"]])):0.7*length(d[["roll_y"]]))
+  local_maxes <- find_maxima(d[["roll_y"]][floor(0.3*length(d[["roll_y"]])):0.7*length(d[["roll_y"]])])
   fit_max <- max(local_maxes) + as.integer(perc/2)
   
 
