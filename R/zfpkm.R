@@ -194,13 +194,14 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 
   local_maxes <- find_maxima(d[["roll_y"]])
   fit_max <- max(local_maxes) + as.integer(perc/2)
+  
 
   # Set the maximum point in the density as the mean for the fitted Gaussian
   mu <- d[["x"]][fit_max] # get max with respect to x) local maxima of rolling
   max_y <- d[["y"]][fit_max]
   cnt <- 0
   
-  while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) ) { # while selected local max y is less than 20% of actual maximum 
+  while  ( (max_y < 0.1*max(d[["y"]])) && (cnt < 20) && FALSE ) { # while selected local max y is less than 20% of actual maximum 
 	cnt <- cnt + 1
     perc <- as.integer((0.2-(cnt*0.01))*length(d[["y"]]) + 1) # rm 1 percent from roll avg interval per iteration
 
@@ -218,12 +219,18 @@ zFPKMCalc <- function(fpkm, min_thresh) {
 	
   }
 
-  if ( (max_y < 0.1*max(d[["y"]])) ) {
+  if ( FALSE && (max_y < 0.1*max(d[["y"]])) ) {  
     mu <- d[["x"]][which.max(d[["y"]])]
     max_y <- max(d[["y"]]) # if doesnt work use regular zFPKM calculation
 	# TODO: FAILURE MESSAGE AND OUTPUT TO LIST?
-  }
+  #}
 
+  if ( TRUE ) {
+	#local_maxes <- local_maxes[floor(0.3*length(local_maxes)):length(local_maxes)]
+	local_maxes <- sort(local_maxes, decreasing=TRUE)
+	while ( length(local_maxes) > 1 && d[["x"]][local_maxes[2]] > d[["x"]][local_maxes[1]] ) {	
+		local_maxes <- local_maxes[-1]
+	fit_max <- local_maxes[1]
 
 
   # Determine the standard deviation
